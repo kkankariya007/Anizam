@@ -1,12 +1,21 @@
 import speech_recognition as sr
+from os import path
+from pydub import AudioSegment
 
-filename = "voice2.wav"
+src = "audi.mp3"
+
+# filename = ".wav"
+filename = "fin.wav"
+
+# convert wav to mp3                                                            
+sound = AudioSegment.from_mp3(src)
+sound.export(filename, format="wav")
+
 
 r = sr.Recognizer()
 with sr.AudioFile(filename) as source:
-    # listen for the data (load audio to memory)
     audio_data = r.record(source)
-    # recognize (convert from speech to text)
     text = r.recognize_google(audio_data)
     print(type(text))
     print(text)
+                                                                         

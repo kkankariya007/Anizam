@@ -1,6 +1,13 @@
 import 'dart:async';
-
+// import 'dart:html' hide File;
+import 'dart:io';
+import 'package:avatar_glow/avatar_glow.dart';
+import 'package:flutter/gestures.dart';
+// import 'package:speech_to_text/speech_recognition_result.dart';
+// import 'package:speech_to_text/speech_to_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_sound/flutter_sound.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main()=>runApp(const MaterialApp(
   home:Anizam(),
@@ -17,48 +24,77 @@ class Anizam extends StatefulWidget {
 }
 
 class _AnizamState extends State<Anizam> {
+  @override
+  void initState() {
+    initRecorder();
+    // TODO: implement initState
+    super.initState();
+  }
+  @override
+  void dispose() {
+    recorder.closeRecorder();
+    // TODO: implement dispose
+    super.dispose();
+  }
+  final recorder=FlutterSoundRecorder();
+  Future initRecorder() async {
+    final status=await Permission.microphone.request();
+    if(status != PermissionStatus.granted){
+      throw 'Permission not given';
+    }
+    await recorder.openRecorder();
+    recorder.setSubscriptionDuration(const Duration(milliseconds: 500));
+  }
+
+  Future startRecord() async {
+    await recorder.startRecorder(toFile: 'audio');
+  }
+  var file;
+  Future stopRecord() async {
+  final filePath= await recorder.stopRecorder();
+  final file = File(filePath!);
+  print('Recording file path: $file');
+  }
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
         elevation: 0,
-        // leading: Icon(
-        //   Icons.menu,
-        //   size:40,
-        // ),
+
         title: const Text(
             'ANIZAM',
             style:TextStyle(
               fontSize: 32,
               color:Colors.white,
             ),
-
-
         ),
+
         centerTitle: true,
         backgroundColor: Colors.transparent,
       ),
-
-
-
 
       body:
         Center(
         child:
         Container(decoration: BoxDecoration(
         gradient: LinearGradient(
-      begin: Alignment.topRight,
-      end: Alignment.bottomLeft,
-      colors: [
-      Colors.black,
-      Colors.deepPurple,
-          ],),),
+        begin: Alignment.topRight,
+        end: Alignment.bottomLeft,
+        colors: [
+        Colors.black,
+        Colors.deepPurple,
+          ],
+        ),
+        ),
+
           child:Center(
             child: Column(mainAxisAlignment: MainAxisAlignment.start,crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
 
-                SizedBox(height: 210.0),
+                SizedBox(height: 190.0),
 
                 Text(
                     'Tap to Anizam',
@@ -70,39 +106,115 @@ class _AnizamState extends State<Anizam> {
                     )
                 ),
 
-                SizedBox(height: 100.0),
+                SizedBox(height: 20.0),
 
+            AvatarGlow(
+             animate:!_hasp,
+               glowColor: Colors.red,
+             // glowColor: Theme.of(context).primaryColor,
+              startDelay: const Duration(milliseconds: 0),
+             endRadius: 150.0,
+             duration: const Duration(milliseconds: 2500),
+             repeatPauseDuration: const Duration(milliseconds:30),
+             repeat: true,
+             child:
                 RawMaterialButton(
-                  onPressed: () => {
-                    setState(() {
-                      Timer(Duration(milliseconds:100), () {
-                        _hasp=!_hasp;
-                      });
-                    })
-                  },
+
                   fillColor:_hasp?Colors.lightBlue:Colors.redAccent,
+                  onPressed: () async {
+                    if (recorder.isRecording){
+                      await stopRecord();
+                      setState(() {
+                      });
+                    }
+                    else{
+                      await startRecord();
+                      setState(() {
+                      });
+                    }
+                    setState(() {
+                        _hasp=!_hasp;
+                    });
+                  },
                   elevation: 10.0,
-                  child: Icon( // <-- Icon
-                    Icons.mic_none_outlined,
+                  child:
+                  Icon( // <-- Icon
+                    recorder.isRecording?Icons.stop:Icons.mic_none_outlined,
                     size: 100.0,
                     color:Colors.white,
                   ),
                   padding: EdgeInsets.all(30.0),
                   shape: CircleBorder(),
                 ),
+          ),
+                SizedBox(height: 10),
+
+
+                SizedBox(
+                  height:40,
+                  width:105,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      elevation: 25,
+                      // Background color
+                    ),
+                    onPressed:() {
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Predict()));
+
+                    },
+                    child:Text("Predict",
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                    ),
+                  ),
+                )
 
               ],
-
             ),
-
           ),
-
         ),
-
         ),
 
       extendBodyBehindAppBar: true,
       backgroundColor: Colors.transparent,
+    );
+  }
+}
+Future upload() async{
+}
+
+class Predict extends StatefulWidget {
+  const Predict({Key? key}) : super(key: key);
+
+  @override
+  State<Predict> createState() => _PredictState();
+}
+
+class _PredictState extends State<Predict> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+
+        title: const Text(
+          'ANIZAM',
+          style:TextStyle(
+            fontSize: 32,
+            color:Colors.black,
+          ),
+        ),
+
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+      ),
+      body:
+      Center(
+      child:
+      Text("Hello"),
+      ),
     );
   }
 }
