@@ -24,11 +24,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# @app.get("/")
-# async def root():
-#     return {"message": "Hello World"}
 
-@app.get("/name")
+@app.post("/name")
 async def savefile(file: bytes=File(...)):
     s = io.BytesIO(file)
     with open("audi .wav", "wb") as f:

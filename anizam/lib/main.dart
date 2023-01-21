@@ -185,7 +185,7 @@ class _AnizamState extends State<Anizam> {
   }
 }
 upload() async{
-  var request=http.MultipartRequest("GET",Uri.parse("https://anizam.up.railway.app/name"));
+  var request=http.MultipartRequest("POST",Uri.parse("https://anizam.up.railway.app/name/"));
   
   
   var audio=await http.MultipartFile.fromBytes('audi', (await rootBundle.load('assets/voice1.wav')).buffer.asUint8List(),
