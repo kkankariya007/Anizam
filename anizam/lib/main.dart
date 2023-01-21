@@ -1,11 +1,10 @@
 import 'dart:async';
-// import 'dart:html' hide File;
 import 'dart:io';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/gestures.dart';
-// import 'package:speech_to_text/speech_recognition_result.dart';
-// import 'package:speech_to_text/speech_to_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -39,6 +38,8 @@ class _AnizamState extends State<Anizam> {
   final recorder=FlutterSoundRecorder();
   Future initRecorder() async {
     final status=await Permission.microphone.request();
+    // final status2=await Permission..request();
+
     if(status != PermissionStatus.granted){
       throw 'Permission not given';
     }
@@ -160,7 +161,8 @@ class _AnizamState extends State<Anizam> {
                       // Background color
                     ),
                     onPressed:() {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Predict()));
+                        upload();
+                        // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Predict()));
 
                     },
                     child:Text("Predict",
@@ -182,7 +184,25 @@ class _AnizamState extends State<Anizam> {
     );
   }
 }
-Future upload() async{
+upload() async{
+  var request=http.MultipartRequest("GET",Uri.parse("https://anizam.up.railway.app/name"));
+  
+  
+  var audio=await http.MultipartFile.fromBytes('audi', (await rootBundle.load('assets/voice1.wav')).buffer.asUint8List(),
+  filename: 'voice1.wav');
+
+
+  request.files.add(audio);
+  var response = await request.send();
+  var responseData= await response.stream.toBytes();
+  var result=String.fromCharCodes(responseData);
+
+  print(response);
+  print("JHI");
+  print(responseData);
+  print(result);
+
+
 }
 
 class Predict extends StatefulWidget {
