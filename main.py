@@ -35,7 +35,7 @@ async def savefile(file: bytes=File(...)):
         f.write(s.getbuffer())
 
     df=pd.read_csv("AnimeQuotes.csv")
-    
+
     r = sr.Recognizer()
     with sr.AudioFile(filename) as source:
         audio_data = r.record(source)
