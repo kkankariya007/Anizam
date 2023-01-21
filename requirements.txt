@@ -44,3 +44,5 @@ typing-extensions==4.4.0
     #   starlette
 urllib3==1.26.14
     # via requests
+gunicorn==20.1.0
+uvicorn==0.19.0
