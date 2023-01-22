@@ -25,7 +25,7 @@ app.add_middleware(
 )
 
 
-@app.post("/name")
+@app.post("/name/")
 async def savefile(file: bytes=File(...)):
     s = io.BytesIO(file)
     with open("audi .wav", "wb") as f:
