@@ -161,6 +161,7 @@ class _AnizamState extends State<Anizam> {
                       // Background color
                     ),
                     onPressed:() {
+                      // postdata();
                         upload();
                         // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Predict()));
 
@@ -185,23 +186,30 @@ class _AnizamState extends State<Anizam> {
   }
 }
 upload() async{
-  var request=http.MultipartRequest("POST",Uri.parse("https://anizam.up.railway.app/name/"));
-  
-  
-  var audio=await http.MultipartFile.fromBytes('audi', (await rootBundle.load('assets/voice1.wav')).buffer.asUint8List(),
-  filename: 'voice1.wav');
+  try {
+    var request = http.MultipartRequest(
+        "GET", Uri.parse("https://anizam.up.railway.app/name/"));
 
 
-  request.files.add(audio);
-  var response = await request.send();
-  var responseData= await response.stream.toBytes();
-  var result=String.fromCharCodes(responseData);
+    var audio = await http.MultipartFile.fromBytes('audi',
+        (await rootBundle.load('assets/voice1.wav')).buffer.asUint8List(),
+        filename: 'voice1.wav');
 
-  print(response);
-  print("JHI");
-  print(responseData);
-  print(result);
 
+    request.files.add(audio);
+    var response = await request.send();
+    var responseData = await response.stream.toBytes();
+    var result = String.fromCharCodes(responseData);
+
+    print(response);
+    print("JHI");
+    print(responseData);
+    print(result);
+  }
+  catch(e)
+  {
+    print(e);
+  }
 
 }
 
