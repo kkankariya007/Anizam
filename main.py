@@ -28,7 +28,7 @@ app.add_middleware(
 @app.post("/name/")
 async def savefile(file: bytes=File(...)):
     s = io.BytesIO(file)
-    with open("audi .wav", "wb") as f:
+    with open("audi.wav", "wb") as f:
         f.write(s.getbuffer())
 
     df=pd.read_csv("AnimeQuotes.csv")

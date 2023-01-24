@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_sound/flutter_sound.dart';
+import 'package:http_parser/http_parser.dart';
+
 import 'package:permission_handler/permission_handler.dart';
 
 void main()=>runApp(const MaterialApp(
@@ -185,6 +187,31 @@ class _AnizamState extends State<Anizam> {
     );
   }
 }
+// upload2() async{
+//   final uri = Uri.parse('https://myendpoint.com');
+//   var request = new http.MultipartRequest('POST', uri);
+//   final httpImage = http.MultipartFile.fromBytes('files.myimage', bytes,
+//       contentType: MediaType.parse(mimeType), filename: 'myImage.png');
+//   request.files.add(httpImage);
+//   final response = await request.send();
+// }
+
+upload3() async{
+  var request2;
+  File ib=File('assets/voice1.wav'.toString());
+  try {
+    request2 = http.MultipartRequest(
+        'POST', Uri.parse("https://anizam.up.railway.app/name/"))
+      ..files.add(await http.MultipartFile.fromPath(
+          'audio', ib.toString(),
+          contentType: MediaType('audio', 'audio/wav')));
+  }
+  catch(e){
+    print(e);
+  }
+  print(request2);
+
+}
 upload() async{
   try {
     var request = http.MultipartRequest(
@@ -193,7 +220,9 @@ upload() async{
 
     var audio = await http.MultipartFile.fromBytes('audi',
         (await rootBundle.load('assets/voice1.wav')).buffer.asUint8List(),
-        filename: 'voice1.wav');
+        filename: 'voice1.wav',
+        contentType: MediaType('audio', 'audio.wav')
+    );
 
 
     request.files.add(audio);
