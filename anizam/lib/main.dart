@@ -188,7 +188,7 @@ class _AnizamState extends State<Anizam> {
 upload() async{
   try {
     var request = http.MultipartRequest(
-        "GET", Uri.parse("https://anizam.up.railway.app/name/"));
+        "POST", Uri.parse("https://anizam.up.railway.app/name/"));
 
 
     var audio = await http.MultipartFile.fromBytes('audi',
@@ -204,6 +204,7 @@ upload() async{
     print(response);
     print("JHI");
     print(responseData);
+    print("YO");
     print(result);
   }
   catch(e)
