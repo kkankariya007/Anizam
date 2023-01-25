@@ -187,14 +187,6 @@ class _AnizamState extends State<Anizam> {
     );
   }
 }
-// upload2() async{
-//   final uri = Uri.parse('https://myendpoint.com');
-//   var request = new http.MultipartRequest('POST', uri);
-//   final httpImage = http.MultipartFile.fromBytes('files.myimage', bytes,
-//       contentType: MediaType.parse(mimeType), filename: 'myImage.png');
-//   request.files.add(httpImage);
-//   final response = await request.send();
-// }
 
 upload3() async{
   var request2;
@@ -212,16 +204,26 @@ upload3() async{
   print(request2);
 
 }
+// upload2() async{
+//   final uri = Uri.parse('https://myendpoint.com');
+//   var request = new http.MultipartRequest('POST', uri);
+//   final httpImage = http.MultipartFile.fromBytes('files.myimage', bytes,
+//       contentType: MediaType.parse(mimeType), filename: 'myImage.png');
+//   request.files.add(httpImage);
+//   final response = await request.send();
+// }
+upload4() async{
+  var request=http.get(Uri.parse('https://anizam.up.railway.app/simple'));
+
+}
 upload() async{
   try {
     var request = http.MultipartRequest(
         "POST", Uri.parse("https://anizam.up.railway.app/name/"));
-
-
-    var audio = await http.MultipartFile.fromBytes('audi',
+    var audio = await http.MultipartFile.fromBytes('audio',
         (await rootBundle.load('assets/voice1.wav')).buffer.asUint8List(),
         filename: 'voice1.wav',
-        contentType: MediaType('audio', 'audio.wav')
+        contentType: MediaType.parse('audio/wav')//'audio', 'wav')
     );
 
 

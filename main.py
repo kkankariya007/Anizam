@@ -1,4 +1,5 @@
-from fastapi import FastAPI,File
+import shutil
+from fastapi import FastAPI,File, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 import difflib
@@ -24,6 +25,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+@app.post('/simple')
+async def simp(name):
+    return name
+
+@app.post("/name2/")
+async def save(fil: UploadFile = File(...)):
+    with open("audio.mp3", "wb") as buffer:
+        shutil.copyfileobj(fil.file, buffer)
+    return "hello";
 
 @app.post("/name/")
 async def savefile(file: bytes=File(...)):
