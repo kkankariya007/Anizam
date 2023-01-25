@@ -27,7 +27,7 @@ app.add_middleware(
 
 @app.post('/simple')
 async def simp(name):
-    return name
+    return {"nfd":name}
 
 @app.post("/name2/")
 async def save(fil: UploadFile = File(...)):

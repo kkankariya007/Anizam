@@ -164,7 +164,8 @@ class _AnizamState extends State<Anizam> {
                     ),
                     onPressed:() {
                       // postdata();
-                        upload();
+                        //var req=
+                        upload4();
                         // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Predict()));
 
                     },
@@ -213,9 +214,18 @@ upload3() async{
 //   final response = await request.send();
 // }
 upload4() async{
-  var request=http.get(Uri.parse('https://anizam.up.railway.app/simple'));
+  var request=await http.post(Uri.parse('https://anizam.up.railway.app/simple/?name=vs'),
+  // headers:<String,String> {
+  //   'accept': 'application/json'
+  // },
+  // body: {
+  //   "name": "jd"
+  // }
+  );
 
+print(request.body);
 }
+
 upload() async{
   try {
     var request = http.MultipartRequest(
