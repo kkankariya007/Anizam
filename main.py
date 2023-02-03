@@ -61,5 +61,5 @@ async def savefile(file: bytes=File(...)):
                     return {df['Name'][j]:df['Anime'][j]}
                     break
     else:
-        return {"0":"Please be more accurate"}
+        return {"Please be more":"accurate"}
 

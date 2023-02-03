@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:avatar_glow/avatar_glow.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -82,7 +81,7 @@ class _AnizamState extends State<Anizam> {
       body:
         Center(
         child:
-        Container(decoration: BoxDecoration(
+        Container(decoration: const BoxDecoration(
         gradient: LinearGradient(
         begin: Alignment.topRight,
         end: Alignment.bottomLeft,
@@ -97,9 +96,9 @@ class _AnizamState extends State<Anizam> {
             child: Column(mainAxisAlignment: MainAxisAlignment.start,crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
 
-                SizedBox(height: 190.0),
+                const SizedBox(height: 190.0),
 
-                Text(
+                const Text(
                     'Tap to Anizam',
                     style:TextStyle(
                       color:Colors.white,
@@ -109,48 +108,48 @@ class _AnizamState extends State<Anizam> {
                     )
                 ),
 
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
 
-            AvatarGlow(
-             animate:!_hasp,
-               glowColor: Colors.red,
-             // glowColor: Theme.of(context).primaryColor,
-              startDelay: const Duration(milliseconds: 0),
-             endRadius: 150.0,
-             duration: const Duration(milliseconds: 2500),
-             repeatPauseDuration: const Duration(milliseconds:30),
-             repeat: true,
-             child:
-                RawMaterialButton(
+              AvatarGlow(
+               animate:!_hasp,
+                 glowColor: Colors.red,
+               // glowColor: Theme.of(context).primaryColor,
+                startDelay: const Duration(milliseconds: 0),
+               endRadius: 150.0,
+               duration: const Duration(milliseconds: 2500),
+               repeatPauseDuration: const Duration(milliseconds:30),
+               repeat: true,
+               child:
+                  RawMaterialButton(
 
-                  fillColor:_hasp?Colors.lightBlue:Colors.redAccent,
-                  onPressed: () async {
-                    if (recorder.isRecording){
-                      await stopRecord();
+                    fillColor:_hasp?Colors.lightBlue:Colors.redAccent,
+                    onPressed: () async {
+                      if (recorder.isRecording){
+                        await stopRecord();
+                        setState(() {
+                        });
+                      }
+                      else{
+                        await startRecord();
+                        setState(() {
+                        });
+                      }
                       setState(() {
+                          _hasp=!_hasp;
                       });
-                    }
-                    else{
-                      await startRecord();
-                      setState(() {
-                      });
-                    }
-                    setState(() {
-                        _hasp=!_hasp;
-                    });
-                  },
-                  elevation: 10.0,
-                  child:
-                  Icon( // <-- Icon
-                    recorder.isRecording?Icons.stop:Icons.mic_none_outlined,
-                    size: 100.0,
-                    color:Colors.white,
-                  ),
-                  padding: EdgeInsets.all(30.0),
-                  shape: CircleBorder(),
-                ),
-          ),
-                SizedBox(height: 10),
+                    },
+                    elevation: 10.0,
+                    child:
+                    Icon( // <-- Icon
+                      recorder.isRecording?Icons.stop:Icons.mic_none_outlined,
+                      size: 100.0,
+                      color:Colors.white,
+                    ),
+                    padding: const EdgeInsets.all(30.0),
+                    shape: const CircleBorder(),
+                    ),
+                      ),
+                const SizedBox(height: 10),
 
 
                 SizedBox(
@@ -162,14 +161,11 @@ class _AnizamState extends State<Anizam> {
                       elevation: 25,
                       // Background color
                     ),
-                    onPressed:() {
-                      // postdata();
-                        //var req=
-                        upload4();
-                        // Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Predict()));
-
+                    onPressed:() async {
+                        await upload();
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const Predict()));
                     },
-                    child:Text("Predict",
+                    child:const Text("Predict",
                     style: TextStyle(
                       fontSize: 16,
                     ),
@@ -188,49 +184,12 @@ class _AnizamState extends State<Anizam> {
     );
   }
 }
-
-upload3() async{
-  var request2;
-  File ib=File('assets/voice1.wav'.toString());
-  try {
-    request2 = http.MultipartRequest(
-        'POST', Uri.parse("https://anizam.up.railway.app/name/"))
-      ..files.add(await http.MultipartFile.fromPath(
-          'audio', ib.toString(),
-          contentType: MediaType('audio', 'audio/wav')));
-  }
-  catch(e){
-    print(e);
-  }
-  print(request2);
-
-}
-// upload2() async{
-//   final uri = Uri.parse('https://myendpoint.com');
-//   var request = new http.MultipartRequest('POST', uri);
-//   final httpImage = http.MultipartFile.fromBytes('files.myimage', bytes,
-//       contentType: MediaType.parse(mimeType), filename: 'myImage.png');
-//   request.files.add(httpImage);
-//   final response = await request.send();
-// }
-upload4() async{
-  var request=await http.post(Uri.parse('https://anizam.up.railway.app/simple/?name=vs'),
-  // headers:<String,String> {
-  //   'accept': 'application/json'
-  // },
-  // body: {
-  //   "name": "jd"
-  // }
-  );
-
-print(request.body);
-}
-
+String charac="",anime="";
 upload() async{
   try {
     var request = http.MultipartRequest(
         "POST", Uri.parse("https://anizam.up.railway.app/name/"));
-    var audio = await http.MultipartFile.fromBytes('audio',
+    var audio = await http.MultipartFile.fromBytes('file',
         (await rootBundle.load('assets/voice1.wav')).buffer.asUint8List(),
         filename: 'voice1.wav',
         contentType: MediaType.parse('audio/wav')//'audio', 'wav')
@@ -242,11 +201,17 @@ upload() async{
     var responseData = await response.stream.toBytes();
     var result = String.fromCharCodes(responseData);
 
-    print(response);
-    print("JHI");
-    print(responseData);
-    print("YO");
     print(result);
+    String predict=result.toString();
+    int idx=predict.indexOf('":"');
+    charac=predict.substring(2,idx);
+    anime=predict.substring(idx+3,predict.length-2);
+
+  print(charac);
+  print(anime);
+    // print(result.runtimeType);
+    // result.split('').forEach((ch) => print(ch));
+
   }
   catch(e)
   {
@@ -283,8 +248,17 @@ class _PredictState extends State<Predict> {
       body:
       Center(
       child:
-      Text("Hello"),
+      Text(charac+"\n\n\t\t\t\t"+anime,
+      style: const TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+        letterSpacing: 1.2,
       ),
-    );
+      ),
+
+
+
+      ),
+      );
   }
 }
