@@ -6,8 +6,6 @@ import difflib
 import speech_recognition as sr
 filename = "audi.wav"
 import io
-
-
 app = FastAPI()
 
 origins = [
@@ -24,10 +22,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-@app.post('/simple')
-async def simp(name):
-    return {"nfd":name}
 
 @app.post("/name2/")
 async def save(fil: UploadFile = File(...)):
