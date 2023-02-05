@@ -56,4 +56,3 @@ async def savefile(file: bytes=File(...)):
                     break
     else:
         return {"Please be more":"accurate"}
-

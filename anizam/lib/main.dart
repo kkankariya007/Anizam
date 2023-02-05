@@ -6,8 +6,10 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:http_parser/http_parser.dart';
-
+import 'package:path/path.dart' as path;
 import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter/cupertino.dart';
+
 
 void main()=>runApp(const MaterialApp(
   home:Anizam(),
@@ -36,9 +38,15 @@ class _AnizamState extends State<Anizam> {
     // TODO: implement dispose
     super.dispose();
   }
+  String filePath='';
   final recorder=FlutterSoundRecorder();
   Future initRecorder() async {
+    filePath = '/storage/emulated/0/Download/Anizam/temp.wav';
+
     final status=await Permission.microphone.request();
+    await Permission.storage.request();
+    await Permission.manageExternalStorage.request();
+
     // final status2=await Permission..request();
 
     if(status != PermissionStatus.granted){
@@ -49,12 +57,18 @@ class _AnizamState extends State<Anizam> {
   }
 
   Future startRecord() async {
-    await recorder.startRecorder(toFile: 'audio');
+    Directory dir = Directory(path.dirname(filePath));
+    if (!dir.existsSync()) {
+      dir.createSync();
+      print('Heyy');
+    }
+    print('Heyyyy');
+    await recorder.startRecorder(toFile: filePath,codec: Codec.pcm16WAV);
   }
   var file;
   Future stopRecord() async {
-  final filePath= await recorder.stopRecorder();
-  final file = File(filePath!);
+  final fdd= await recorder.stopRecorder();
+  final file = File(fdd!);
   print('Recording file path: $file');
   }
 
@@ -184,14 +198,19 @@ class _AnizamState extends State<Anizam> {
     );
   }
 }
+
+
 String charac="",anime="";
 upload() async{
   try {
     var request = http.MultipartRequest(
         "POST", Uri.parse("https://anizam.up.railway.app/name/"));
     var audio = await http.MultipartFile.fromBytes('file',
-        (await rootBundle.load('assets/voice1.wav')).buffer.asUint8List(),
-        filename: 'voice1.wav',
+        await File.fromUri(Uri.parse("/storage/emulated/0/Download/Anizam/temp.wav")).readAsBytes(),
+        // await rootBundle.load('/storage/emulated/0/Download/Anizam/temp.wav')).buffer.asUint8List(),
+        // '/storage/emulated/0/Download/Anizam/temp.wav'
+        // request.files.add(new http.MultipartFile.fromBytes('file', await File.fromUri("<path/to/file>").readAsBytes(), contentType: new MediaType('image', 'jpeg'))
+        filename: 'temp.wav',
         contentType: MediaType.parse('audio/wav')//'audio', 'wav')
     );
 
