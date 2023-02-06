@@ -2,13 +2,11 @@ import 'dart:async';
 import 'dart:io';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:path/path.dart' as path;
 import 'package:permission_handler/permission_handler.dart';
-import 'package:flutter/cupertino.dart';
 
 
 void main()=>runApp(const MaterialApp(
@@ -60,16 +58,13 @@ class _AnizamState extends State<Anizam> {
     Directory dir = Directory(path.dirname(filePath));
     if (!dir.existsSync()) {
       dir.createSync();
-      print('Heyy');
     }
-    print('Heyyyy');
     await recorder.startRecorder(toFile: filePath,codec: Codec.pcm16WAV);
   }
   var file;
   Future stopRecord() async {
   final fdd= await recorder.stopRecorder();
-  final file = File(fdd!);
-  print('Recording file path: $file');
+  // final file = File(fdd!);
   }
 
   // This widget is the root of your application.
@@ -95,18 +90,18 @@ class _AnizamState extends State<Anizam> {
       body:
         Center(
         child:
-        Container(decoration: const BoxDecoration(
-        gradient: LinearGradient(
-        begin: Alignment.topRight,
-        end: Alignment.bottomLeft,
-        colors: [
-        Colors.black,
-        Colors.deepPurple,
-          ],
-        ),
-        ),
+            Container(decoration: const BoxDecoration(
+            gradient: LinearGradient(
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+            colors: [
+            Colors.black,
+            Colors.deepPurple,
+              ],
+            ),
+            ),
 
-          child:Center(
+                child:Center(
             child: Column(mainAxisAlignment: MainAxisAlignment.start,crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
 
@@ -176,7 +171,14 @@ class _AnizamState extends State<Anizam> {
                       // Background color
                     ),
                     onPressed:() async {
+                        showDialog(
+                        context: context,
+                        builder: (context){
+                          return const Center(child: CircularProgressIndicator());
+                        },
+                      );
                         await upload();
+                        Navigator.of(context).pop();
                         Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const Predict()));
                     },
                     child:const Text("Predict",
@@ -201,15 +203,13 @@ class _AnizamState extends State<Anizam> {
 
 
 String charac="",anime="";
-upload() async{
+Future upload() async{
+
   try {
     var request = http.MultipartRequest(
         "POST", Uri.parse("https://anizam.up.railway.app/name/"));
     var audio = await http.MultipartFile.fromBytes('file',
         await File.fromUri(Uri.parse("/storage/emulated/0/Download/Anizam/temp.wav")).readAsBytes(),
-        // await rootBundle.load('/storage/emulated/0/Download/Anizam/temp.wav')).buffer.asUint8List(),
-        // '/storage/emulated/0/Download/Anizam/temp.wav'
-        // request.files.add(new http.MultipartFile.fromBytes('file', await File.fromUri("<path/to/file>").readAsBytes(), contentType: new MediaType('image', 'jpeg'))
         filename: 'temp.wav',
         contentType: MediaType.parse('audio/wav')//'audio', 'wav')
     );
@@ -220,22 +220,17 @@ upload() async{
     var responseData = await response.stream.toBytes();
     var result = String.fromCharCodes(responseData);
 
-    print(result);
     String predict=result.toString();
     int idx=predict.indexOf('":"');
     charac=predict.substring(2,idx);
     anime=predict.substring(idx+3,predict.length-2);
 
-  print(charac);
-  print(anime);
-    // print(result.runtimeType);
-    // result.split('').forEach((ch) => print(ch));
-
   }
   catch(e)
   {
-    print(e);
+    // print(e);
   }
+  // _hasp=true;
 
 }
 
@@ -257,7 +252,7 @@ class _PredictState extends State<Predict> {
           'ANIZAM',
           style:TextStyle(
             fontSize: 32,
-            color:Colors.black,
+            color:Colors.white,
           ),
         ),
 
@@ -266,18 +261,35 @@ class _PredictState extends State<Predict> {
       ),
       body:
       Center(
-      child:
-      Text(charac+"\n\n\t\t\t\t"+anime,
-      style: const TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.bold,
-        letterSpacing: 1.2,
-      ),
+        child:
+        Container(decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+            colors: [
+              Colors.black,
+              Colors.deepPurple,
+            ],
+          ),
+        ),
+          child: Center(
+            child: Text(charac+"\n\n"+anime,
+            style: const TextStyle(
+              fontSize: 21,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.2,
+              color: Colors.white,
+            ),
+            ),
+          ),
+        ),
       ),
 
 
 
-      ),
+
+      extendBodyBehindAppBar: true,
+
       );
   }
 }
