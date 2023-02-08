@@ -36,6 +36,7 @@ class _AnizamState extends State<Anizam> {
     // TODO: implement dispose
     super.dispose();
   }
+
   String filePath='';
   final recorder=FlutterSoundRecorder();
   Future initRecorder() async {
@@ -180,6 +181,9 @@ class _AnizamState extends State<Anizam> {
                         await upload();
                         Navigator.of(context).pop();
                         Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const Predict()));
+                        setState(() {
+                          _hasp=true;
+                        });
                     },
                     child:const Text("Predict",
                     style: TextStyle(
