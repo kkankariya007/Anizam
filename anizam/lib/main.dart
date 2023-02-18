@@ -7,7 +7,7 @@ import 'package:flutter_sound/flutter_sound.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:path/path.dart' as path;
 import 'package:permission_handler/permission_handler.dart';
-
+// import 'dart:html' as html;
 
 void main()=>runApp(const MaterialApp(
   home:Anizam(),
@@ -191,7 +191,29 @@ class _AnizamState extends State<Anizam> {
                     ),
                     ),
                   ),
-                )
+                ),
+                SizedBox(height:35),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.20),
+                      // color: Colors.grey.withOpacity(0.10),
+                        borderRadius: BorderRadius.all(Radius.circular(7))
+                    ),
+                    // color: Colors.white.withOpacity(0.3),
+                    padding: EdgeInsets.all(10.0),
+                    child:
+                    Text("Examples\n1. If You Win You Live If You Lose You Die If You Dont Fight You Can t Win"
+                        "\n2. If You Don’t Like your destiny don’t accept it, Instead have the courage to change it the way you want it to be",
+                  style:TextStyle(
+                    color: Colors.white,
+                    fontSize: 14.0,
+                    height: 1.4,
+                  )
+                    ),
+                  ),
+                ),
 
               ],
             ),
