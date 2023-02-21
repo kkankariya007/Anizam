@@ -53,8 +53,8 @@ android {
         applicationId "com.kunalkankariya.anizam"
         minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
+        versionCode 2
+        versionName '1.1.0'
     }
 
     signingConfigs {

@@ -106,7 +106,7 @@ class _AnizamState extends State<Anizam> {
             child: Column(mainAxisAlignment: MainAxisAlignment.start,crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
 
-                const SizedBox(height: 190.0),
+                const SizedBox(height: 170.0),
 
                 const Text(
                     'Tap to Anizam',
@@ -118,7 +118,7 @@ class _AnizamState extends State<Anizam> {
                     )
                 ),
 
-                const SizedBox(height: 20.0),
+                const SizedBox(height: 10.0),
 
               AvatarGlow(
                animate:!_hasp,
@@ -161,7 +161,6 @@ class _AnizamState extends State<Anizam> {
                       ),
                 const SizedBox(height: 10),
 
-
                 SizedBox(
                   height:40,
                   width:105,
@@ -192,25 +191,43 @@ class _AnizamState extends State<Anizam> {
                     ),
                   ),
                 ),
-                SizedBox(height:35),
+                SizedBox(height:55),
+
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.20),
+                      color: Colors.white.withOpacity(0.15),
                       // color: Colors.grey.withOpacity(0.10),
                         borderRadius: BorderRadius.all(Radius.circular(7))
                     ),
                     // color: Colors.white.withOpacity(0.3),
                     padding: EdgeInsets.all(10.0),
                     child:
-                    Text("Examples\n1. If You Win You Live If You Lose You Die If You Dont Fight You Can t Win"
-                        "\n2. If You Don’t Like your destiny don’t accept it, Instead have the courage to change it the way you want it to be",
+                    Column(
+                      children: [
+                        Text("Examples : \n1. If You Win You Live If You Lose You Die."
+                            "\n2. If You Don’t Like your destiny don’t accept it, Instead have the courage to change it.",
                   style:TextStyle(
-                    color: Colors.white,
-                    fontSize: 14.0,
-                    height: 1.4,
+                        color: Colors.white,
+                        fontSize: 14.2,
+                        height: 1.5,
                   )
+                        ),
+                        Align(
+                          alignment: Alignment.topRight,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.black.withOpacity(0.4),
+                            ),
+                          onPressed:() async{
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const Examples()));
+                          },
+                              child:
+                          Text("More Examples ->"),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -227,7 +244,6 @@ class _AnizamState extends State<Anizam> {
   }
 }
 
-
 String charac="",anime="";
 Future upload() async{
 
@@ -239,7 +255,6 @@ Future upload() async{
         filename: 'temp.wav',
         contentType: MediaType.parse('audio/wav')//'audio', 'wav')
     );
-
 
     request.files.add(audio);
     var response = await request.send();
@@ -258,6 +273,77 @@ Future upload() async{
   }
   // _hasp=true;
 
+}
+class Examples extends StatelessWidget {
+  const Examples({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+
+        title: const Text(
+          'ANIZAM',
+          style:TextStyle(
+            fontSize: 32,
+            color:Colors.white,
+          ),
+        ),
+
+        centerTitle: true,
+        backgroundColor: Colors.transparent,
+      ),
+      body:
+      Center(
+        child:
+        Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          padding: EdgeInsets.all(8.0),
+          decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+            colors: [
+              Colors.black,
+              Colors.deepPurple,
+            ],
+          ),
+        ),
+
+              child: Column(
+                children: [
+                  SizedBox(height:AppBar().preferredSize.height+kToolbarHeight),
+                  Container(
+                    padding: EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                        color: Colors.grey.withOpacity(0.20),
+                        borderRadius: BorderRadius.all(Radius.circular(7))
+                    ),
+                    width: MediaQuery.of(context).size.width,
+                      child: Text("More Examples...\n\n"
+                          "1. If you don’t take risks you can’t create a future\n\n"
+                        "2. People become stronger because they have memories they can’t forget\n\n"
+                        "3. The ticket to the future is always open\n\n"
+                        "4. There are some flowers you only see when you take detours\n\n"
+                        "5. If you re gonna hit it, hit it until it breaks",
+                        style: const TextStyle(
+                          fontSize: 21,
+                          // fontWeight: FontWeight.bold,
+                          letterSpacing: 1.5,
+                          height: 1.4,
+                          color: Colors.white,
+                        ),
+                      ),
+                  ),
+                ],
+              ),
+        ),
+      ),
+      extendBodyBehindAppBar: true,
+    );
+  }
 }
 
 class Predict extends StatefulWidget {
@@ -310,9 +396,6 @@ class _PredictState extends State<Predict> {
           ),
         ),
       ),
-
-
-
 
       extendBodyBehindAppBar: true,
 
