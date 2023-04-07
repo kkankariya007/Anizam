@@ -6,6 +6,12 @@
       <excludeFolder url="file://$MODULE_DIR$/anizam/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/anizam/build" />
       <excludeFolder url="file://$MODULE_DIR$/anizam/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/anizam/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/anizam/build" />
+      <excludeFolder url="file://$MODULE_DIR$/anizam/.dart_tool" />
+      <excludeFolder url="file://$MODULE_DIR$/anizam/.pub" />
+      <excludeFolder url="file://$MODULE_DIR$/anizam/build" />
+      <excludeFolder url="file://$MODULE_DIR$/anizam/.dart_tool" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
