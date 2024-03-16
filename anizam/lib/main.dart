@@ -44,13 +44,14 @@ class _AnizamState extends State<Anizam> {
     filePath = '/storage/emulated/0/Download/Anizam/temp.wav';
 
     final status=await Permission.microphone.request();
-    await Permission.storage.request();
-    await Permission.manageExternalStorage.request();
+    // final status2= await Permission.storage.request();
+    final status3= await Permission.manageExternalStorage.request();
 
+      // print(status2);
     // final status2=await Permission..request();
-
     if(status != PermissionStatus.granted){
       throw 'Permission not given';
+      print("HEllo HI");
     }
     await recorder.openRecorder();
     recorder.setSubscriptionDuration(const Duration(milliseconds: 500));
@@ -103,137 +104,139 @@ class _AnizamState extends State<Anizam> {
             ),
             ),
 
-                child:Center(
-            child: Column(mainAxisAlignment: MainAxisAlignment.start,crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
+              child:Center(
+            child: SingleChildScrollView (
+              child: Column(mainAxisAlignment: MainAxisAlignment.start,crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
 
-                const SizedBox(height: 170.0),
+                  const SizedBox(height: 170.0),
 
-                const Text(
-                    'Tap to Anizam',
-                    style:TextStyle(
-                      color:Colors.white,
-                      fontSize: 38,
-                      letterSpacing: 1.1,
-                      fontWeight: FontWeight.bold,
-                    )
-                ),
+                  const Text(
+                      'Tap to Anizam',
+                      style:TextStyle(
+                        color:Colors.white,
+                        fontSize: 38,
+                        letterSpacing: 1.1,
+                        fontWeight: FontWeight.bold,
+                      )
+                  ),
 
-                const SizedBox(height: 10.0),
+                  const SizedBox(height: 10.0),
 
-              AvatarGlow(
-               animate:!_hasp,
-                 glowColor: Colors.red,
-               // glowColor: Theme.of(context).primaryColor,
-                startDelay: const Duration(milliseconds: 0),
-               endRadius: 150.0,
-               duration: const Duration(milliseconds: 2500),
-               repeatPauseDuration: const Duration(milliseconds:30),
-               repeat: true,
-               child:
-                  RawMaterialButton(
+                AvatarGlow(
+                 animate:!_hasp,
+                   glowColor: Colors.red,
+                 // glowColor: Theme.of(context).primaryColor,
+                  startDelay: const Duration(milliseconds: 0),
+                 endRadius: 150.0,
+                 duration: const Duration(milliseconds: 2500),
+                 repeatPauseDuration: const Duration(milliseconds:30),
+                 repeat: true,
+                 child:
+                    RawMaterialButton(
 
-                    fillColor:_hasp?Colors.lightBlue:Colors.redAccent,
-                    onPressed: () async {
-                      if (recorder.isRecording){
-                        await stopRecord();
+                      fillColor:_hasp?Colors.lightBlue:Colors.redAccent,
+                      onPressed: () async {
+                        if (recorder.isRecording){
+                          await stopRecord();
+                          setState(() {
+                          });
+                        }
+                        else{
+                          await startRecord();
+                          setState(() {
+                          });
+                        }
                         setState(() {
+                            _hasp=!_hasp;
                         });
-                      }
-                      else{
-                        await startRecord();
-                        setState(() {
-                        });
-                      }
-                      setState(() {
-                          _hasp=!_hasp;
-                      });
-                    },
-                    elevation: 10.0,
-                    child:
-                    Icon( // <-- Icon
-                      recorder.isRecording?Icons.stop:Icons.mic_none_outlined,
-                      size: 100.0,
-                      color:Colors.white,
-                    ),
-                    padding: const EdgeInsets.all(30.0),
-                    shape: const CircleBorder(),
-                    ),
+                      },
+                      elevation: 10.0,
+                      child:
+                      Icon( // <-- Icon
+                        recorder.isRecording?Icons.stop:Icons.mic_none_outlined,
+                        size: 100.0,
+                        color:Colors.white,
                       ),
-                const SizedBox(height: 10),
-
-                SizedBox(
-                  height:40,
-                  width:105,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      elevation: 25,
-                      // Background color
-                    ),
-                    onPressed:() async {
-                        showDialog(
-                        context: context,
-                        builder: (context){
-                          return const Center(child: CircularProgressIndicator());
-                        },
-                      );
-                        await upload();
-                        Navigator.of(context).pop();
-                        Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const Predict()));
-                        setState(() {
-                          _hasp=true;
-                        });
-                    },
-                    child:const Text("Predict",
-                    style: TextStyle(
-                      fontSize: 16,
-                    ),
-                    ),
-                  ),
-                ),
-                SizedBox(height:55),
-
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.15),
-                      // color: Colors.grey.withOpacity(0.10),
-                        borderRadius: BorderRadius.all(Radius.circular(7))
-                    ),
-                    // color: Colors.white.withOpacity(0.3),
-                    padding: EdgeInsets.all(10.0),
-                    child:
-                    Column(
-                      children: [
-                        Text("Examples : \n1. If You Win You Live If You Lose You Die."
-                            "\n2. If You Don’t Like your destiny don’t accept it, Instead have the courage to change it.",
-                  style:TextStyle(
-                        color: Colors.white,
-                        fontSize: 14.2,
-                        height: 1.5,
-                  )
+                      padding: const EdgeInsets.all(30.0),
+                      shape: const CircleBorder(),
+                      ),
                         ),
-                        Align(
-                          alignment: Alignment.topRight,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.black.withOpacity(0.4),
-                            ),
-                          onPressed:() async{
-                            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const Examples()));
+                  const SizedBox(height: 10),
+
+                  SizedBox(
+                    height:40,
+                    width:105,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        elevation: 25,
+                        // Background color
+                      ),
+                      onPressed:() async {
+                          showDialog(
+                          context: context,
+                          builder: (context){
+                            return const Center(child: CircularProgressIndicator());
                           },
-                              child:
-                          Text("More Examples ->"),
-                          ),
-                        ),
-                      ],
+                        );
+                          await upload();
+                          Navigator.of(context).pop();
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const Predict()));
+                          setState(() {
+                            _hasp=true;
+                          });
+                      },
+                      child:const Text("Predict",
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                      ),
                     ),
                   ),
-                ),
+                  SizedBox(height:55),
 
-              ],
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.15),
+                        // color: Colors.grey.withOpacity(0.10),
+                          borderRadius: BorderRadius.all(Radius.circular(7))
+                      ),
+                      // color: Colors.white.withOpacity(0.3),
+                      padding: EdgeInsets.all(10.0),
+                      child:
+                      Column(
+                        children: [
+                          Text("Examples : \n1. If You Win You Live If You Lose You Die."
+                              "\n2. If You Don’t Like your destiny don’t accept it, Instead have the courage to change it.",
+                    style:TextStyle(
+                          color: Colors.white,
+                          fontSize: 14.2,
+                          height: 1.5,
+                    )
+                          ),
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.black.withOpacity(0.4),
+                              ),
+                            onPressed:() async{
+                              Navigator.of(context).push(MaterialPageRoute(builder: (context)=>const Examples()));
+                            },
+                                child:
+                            Text("More Examples ->"),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                ],
+              ),
             ),
           ),
         ),
@@ -250,7 +253,7 @@ Future upload() async{
 
   try {
     var request = http.MultipartRequest(
-        "POST", Uri.parse("https://anizam.up.railway.app/name/"));
+        "POST", Uri.parse("https://anizam.onrender.com/name/"));
     var audio = await http.MultipartFile.fromBytes('file',
         await File.fromUri(Uri.parse("/storage/emulated/0/Download/Anizam/temp.wav")).readAsBytes(),
         filename: 'temp.wav',
@@ -299,8 +302,8 @@ class Examples extends StatelessWidget {
       Center(
         child:
         Container(
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
           padding: EdgeInsets.all(8.0),
           decoration: const BoxDecoration(
           gradient: LinearGradient(
